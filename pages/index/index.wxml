@@ -1,0 +1,13 @@
+<!--index.wxml-->
+<view class="container" style="padding: 0"
+    bindtouchstart="cvsStart"
+    bindtouchend="cvsEnd"
+    bindtouchcancel="cvsCancel">
+  <canvas 
+    disable-scroll="true"
+    bindtouchmove="cvsMoveFake"
+    canvas-id="target" id="target"
+    style='width:{{screenWidth}}px; height:{{screenHeight}}px'
+    >
+  </canvas>
+</view>
