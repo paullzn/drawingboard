@@ -1,13 +1,58 @@
 <!--index.wxml-->
-<view class="container" style="padding: 0"
-    bindtouchstart="cvsStart"
-    bindtouchend="cvsEnd"
-    bindtouchcancel="cvsCancel">
+<view class="container" style="padding: 0">
+  <view class="canvasContainer">
+  
   <canvas 
     disable-scroll="true"
-    bindtouchmove="cvsMoveFake"
-    canvas-id="target" id="target"
-    style='width:{{screenWidth}}px; height:{{screenHeight}}px'
+
+    canvas-id="baseCanvas" id="baseCanvas"
+    style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
     >
   </canvas>
+  <canvas 
+    disable-scroll="true"
+
+    canvas-id="pen" id="pen"
+    style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
+    >
+  </canvas>
+  <canvas 
+    disable-scroll="true"
+    bindtouchmove="cvsMove"
+    bindtouchstart="cvsStart"
+    bindtouchend="cvsEnd"
+    bindtouchcancel="cvsCancel"
+    canvas-id="controlPanel" id="controlPanel"
+    style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
+    >
+  </canvas>
+  </view>
+  
+  <!--<button id="mainButton" bindtap="MainTap">开始</button>
+  <view class="controlPanel" wx:if="{{showControlPanel}}" bindtap="ControlPanelTap">
+    <button id="resetButton" class="controlButton">Reset</button>
+    <button id="rollbackButton" class="controlButton">Back</button>
+    <button id="penButton" class="controlButton">Pen</button>
+    <button id="eraserButton" class="controlButton">Eraser</button>
+    <view class="brushContainer">
+      <button>s1</button>
+      <button>s2</button>
+      <button>s3</button>
+      <button>s4</button>
+      <button>s5</button>
+      <button>s6</button>
+      <button>s7</button>
+      <button>s8</button>
+    </view>
+    <view class="colorContainer">
+      <button id="grayC"></button>
+      <button id="redC"></button>
+      <button id="greenC"></button>
+      <button id="blueC"></button>
+      <button id="brownC"></button>
+      <button id="pinkC"></button>
+      <button id="whiteC"></button>
+      <button id="yellowC"></button>
+    </view>
+  </view>-->
 </view>

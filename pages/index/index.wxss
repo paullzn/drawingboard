@@ -1,21 +1,101 @@
 /**index.wxss**/
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container {
+  position: absolute;
 }
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.container canvas {
+  position: absolute;
+  z-index: 1;
+}
+.canvasContainer {
+  position: absolute;
+  z-index: 1;
 }
 
-.userinfo-nickname {
-  color: #aaa;
+.controlPanel {
+  position: absolute;
+  z-index: 2;
+  bottom: 10px;
+  left: 10px;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10px;
+  height: 300px;
+  width: 300px;
 }
 
-.usermotto {
-  margin-top: 200px;
+.controlPanel button {
+  width: 40px;
+  height: 40px;
+  margin: 0px;
+  padding: 0px;
 }
+
+.controlPanel .controlButton {
+  height: 60px;
+  width: 60px;
+  background-color: #FFCD00;
+}
+
+.brushContainer {
+  position: absolute;
+  top: 20px;
+  left: 110px;
+}
+
+.brushContainer button {
+  display: inline-block;
+}
+
+.colorContainer {
+  position: absolute;
+  top: 110px;
+  left: 110px;
+}
+
+.colorContainer button {
+  display: inline-block;
+}
+
+#mainButton {
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  bottom: 20px;
+  height: 80px;
+  width: 80px;
+  background-color: #FFCD00;
+}
+
+#resetButton {
+  position: absolute;
+  left: 20px;
+  top: 35px;
+}
+
+#rollbackButton {
+  position: absolute;
+  left: 20px;
+  top: 120px;
+}
+
+#penButton {
+  position: absolute;
+  bottom: 20px;
+  left: 120px;
+}
+
+#eraserButton {
+  position: absolute;
+  bottom: 20px;
+  left: 205px;
+}
+
+#yellowC { background-color: yellow; }
+#grayC { background-color: gray; }
+#blueC { background-color: cornflowerblue; }
+#redC { background-color: orangered; }
+#pinkC { background-color: pink; }
+#whiteC { background-color: white; }
+#greenC { background-color: lawngreen; }
+#brownC { background-color: saddlebrown; }

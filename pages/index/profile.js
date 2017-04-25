@@ -1,19 +1,54 @@
 // pages/index/profile.js
-Page({
-  data:{},
-  onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
-  },
-  onReady:function(){
-    // 页面渲染完成
-  },
-  onShow:function(){
-    // 页面显示
-  },
-  onHide:function(){
-    // 页面隐藏
-  },
-  onUnload:function(){
-    // 页面关闭
-  }
-})
+var app = getApp() 
+Page( { 
+ data: { 
+  /** 
+    * 页面配置 
+    */
+  winWidth: 0, 
+  winHeight: 0, 
+  // tab切换 
+  currentTab: 0, 
+ }, 
+ onLoad: function() { 
+  var that = this; 
+  
+  /** 
+   * 获取系统信息 
+   */
+  wx.getSystemInfo( { 
+  
+   success: function( res ) { 
+    that.setData( { 
+     winWidth: res.windowWidth, 
+     winHeight: res.windowHeight 
+    }); 
+   }
+  
+  }); 
+ }, 
+ /** 
+   * 滑动切换tab 
+   */
+ bindChange: function( e ) { 
+  
+  var that = this; 
+  that.setData( { currentTab: e.detailcurrent }); 
+  
+ }, 
+ /** 
+  * 点击tab切换 
+  */
+ swichNav: function( e ) { 
+  
+  var that = this; 
+  
+  if( this.datacurrentTab === e.target.datasetcurrent ) { 
+   return false; 
+  } else { 
+   thatsetData( { 
+    currentTab: e.target.data.setcurrent 
+   }) 
+  } 
+ } 
+}) 
