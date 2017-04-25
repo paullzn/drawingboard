@@ -9,6 +9,9 @@ var penBuilder = pen.initBuilder('pen');
 var controlPanel = require('../../utils/ControlPanel.js')
 var controlPanelBuilder = controlPanel.initBuilder('controlPanel');
 
+var eventRegistryModule = require('../../utils/EventRegistry.js')
+var EventRegistry = eventRegistryModule.initBuilder('controlPanel');
+
 var app = getApp()
 Page({
   data: {
@@ -44,36 +47,34 @@ Page({
       }
     })
     controlPanelBuilder.draw()
+    EventRegistry.setListender(penBuilder, ['start', 'move', 'end', 'cancel'],
+        [
+            penBuilder.start,
+            penBuilder.move,
+            penBuilder.end,
+            penBuilder.cancel])
+    EventRegistry.setListender(strokeBuilder, ['start', 'move', 'end', 'cancel'], [strokeBuilder.start, strokeBuilder.move, strokeBuilder.end, strokeBuilder.cancel])
   },
   onReady: function(e) {
   },
   cvsStart: function(e) {
-    strokeBuilder.start(e);
-    penBuilder.start(e);
-    controlPanelBuilder.start(e);
+    EventRegistry.start(e);
+    //strokeBuilder.start(e);
+    //penBuilder.start(e);
+    //controlPanelBuilder.start(e);
   },
   cvsEnd: function(e) {
-    strokeBuilder.end(e);
-    penBuilder.end(e);
-    controlPanelBuilder.tap(e);
+    EventRegistry.end(e);
+    //strokeBuilder.end(e);
+    //penBuilder.end(e);
+    //controlPanelBuilder.tap(e);
   },
   cvsMove: function(e) {
-    strokeBuilder.move(e);
-    penBuilder.move(e);
+    EventRegistry.move(e);
+    //strokeBuilder.move(e);
+    //penBuilder.move(e);
   },
   cvsCancel: function(e) {
-    console.log("cancel:");
-    console.log(e);
-  },
-  MainTap: function(e) {
-    this.setData({
-      showControlPanel: !this.data.showControlPanel
-    });
-  },
-  ControlPanelTap: function(e) {
-    console.log(e);
-    this.setData({
-      showControlPanel: !this.data.showControlPanel
-    });
+    EventRegistry.cancel(e);
   }
 })
