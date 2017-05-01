@@ -1,0 +1,41 @@
+/* pages/index/profile.wxss */
+.swiper-tab {
+  width: 100%; 
+  border-bottom: 2rpx solid #777777; 
+  text-align: center; 
+  line-height: 80rpx;} 
+.swiper-tab-list{ font-size: 30rpx; 
+  display: inline-block; 
+  width: 33%; 
+  color: #777777; 
+}
+.on{ color: #48c23d;
+  border-bottom: 5rpx solid #48c23d;}
+  
+.swiper-box{ display: block; height: 100%; width: 100%; overflow: hidden; } 
+.swiper-box view{ 
+  text-align: center; 
+}
+.scroll-view-row {
+    margin: 0px;
+    padding: 0px;
+    height: 122px;
+}
+.scroll-view-item {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    margin: 1px;
+}
+.bc_green {
+    background-color: #48c23d;
+}
+.bc_yellow {
+    background-color: yellow;
+}
+.bc_blue {
+    background-color: deepskyblue;
+}
+.bc_red {
+    background-color: red;
+}

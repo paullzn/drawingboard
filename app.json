@@ -1,7 +1,7 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/index/profile",
+    "pages/profile/profile",
     "pages/logs/logs"
   ],
   "window":{
@@ -19,10 +19,10 @@
      "iconPath": "images/draw.png",  
      "pagePath": "pages/index/index",  
      "text": "涂鸦"  
-   }, {  
+   }, {
      "selectedIconPath": "images/profile.png",  
      "iconPath": "images/profile.png",  
-     "pagePath": "pages/index/profile",
+     "pagePath": "pages/profile/profile",
      "text": "我的"  
    }]
  }  

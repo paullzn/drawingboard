@@ -1,16 +1,14 @@
 //index.js
 //获取应用实例
-var stroke = require('../../utils/Stroke.js')
-var strokeBuilder = stroke.initBuilder('baseCanvas');
+import { Stroke } from '../../widgets/Stroke'
+import { Pen } from '../../widgets/Pen'
+import { ControlPanel } from '../../widgets/ControlPanel'
+import { EventRegistry } from '../../utils/EventRegistry'
 
-var pen = require('../../utils/Pen.js')
-var penBuilder = pen.initBuilder('pen');
-
-var controlPanel = require('../../utils/ControlPanel.js')
-var controlPanelBuilder = controlPanel.initBuilder('controlPanel');
-
-var eventRegistryModule = require('../../utils/EventRegistry.js')
-var EventRegistry = eventRegistryModule.initBuilder('controlPanel');
+let stroke = new Stroke('baseCanvas')
+let pen = new Pen('pen')
+let controlPanel = new ControlPanel('controlPanel')
+let eventRegistry = new EventRegistry('controlPanel')
 
 var app = getApp()
 Page({
@@ -46,35 +44,23 @@ Page({
         })
       }
     })
-    controlPanelBuilder.draw()
-    EventRegistry.setListender(penBuilder, ['start', 'move', 'end', 'cancel'],
-        [
-            penBuilder.start,
-            penBuilder.move,
-            penBuilder.end,
-            penBuilder.cancel])
-    EventRegistry.setListender(strokeBuilder, ['start', 'move', 'end', 'cancel'], [strokeBuilder.start, strokeBuilder.move, strokeBuilder.end, strokeBuilder.cancel])
+    controlPanel.draw()
+    eventRegistry.setListener(controlPanel, ['ontouchstart', 'ontouchend'])
+    eventRegistry.setListener(pen, ['ontouchstart', 'ontouchmove', 'ontouchend'])
+    eventRegistry.setListener(stroke, ['ontouchstart', 'ontouchmove', 'ontouchend'])
   },
   onReady: function(e) {
   },
-  cvsStart: function(e) {
-    EventRegistry.start(e);
-    //strokeBuilder.start(e);
-    //penBuilder.start(e);
-    //controlPanelBuilder.start(e);
+  cvsTouchStart: function(e) {
+    eventRegistry.ontouchstart(e);
   },
-  cvsEnd: function(e) {
-    EventRegistry.end(e);
-    //strokeBuilder.end(e);
-    //penBuilder.end(e);
-    //controlPanelBuilder.tap(e);
+  cvsTouchEnd: function(e) {
+    eventRegistry.ontouchend(e);
   },
-  cvsMove: function(e) {
-    EventRegistry.move(e);
-    //strokeBuilder.move(e);
-    //penBuilder.move(e);
+  cvsTouchMove: function(e) {
+    eventRegistry.ontouchmove(e);
   },
-  cvsCancel: function(e) {
-    EventRegistry.cancel(e);
+  cvsTouchCancel: function(e) {
+    eventRegistry.ontouchcancel(e);
   }
 })

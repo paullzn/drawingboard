@@ -16,10 +16,10 @@
     </canvas>
     <canvas 
       disable-scroll="true"
-      bindtouchmove="cvsMove"
-      bindtouchstart="cvsStart"
-      bindtouchend="cvsEnd"
-      bindtouchcancel="cvsCancel"
+      bindtouchmove="cvsTouchMove"
+      bindtouchstart="cvsTouchStart"
+      bindtouchend="cvsTouchEnd"
+      bindtouchcancel="cvsTouchCancel"
       canvas-id="controlPanel" id="controlPanel"
       style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
       >
