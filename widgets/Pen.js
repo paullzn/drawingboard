@@ -4,6 +4,18 @@ export class Pen extends Widget {
     constructor(canvasId) {
         super()
         this.canvasId = canvasId;
+        this.eventList.push(...['ontouchstart', 'ontouchend', 'ontouchmove', 'pentypechange'])
+
+        this.prepareColor = '#ff0000'
+        this.actionColor = '#888888'
+
+        this.drawR = 5
+        this.cleanR = 30
+
+        this.drawLineWidth = 4
+        this.cleanLineWidth = 1
+
+        this.penType = 'pen'
     }
 
     checkHitArea() {
@@ -25,20 +37,43 @@ export class Pen extends Widget {
         this._draw(e);
         return true
     }
+
+    pentypechange(e) {
+        this.penType = e.penType
+        this._clean()
+        return true
+    }
+
+    _clean() {
+        let context = wx.createContext()
+        wx.drawCanvas({
+            canvasId: this.canvasId,
+            reserve: false,
+            actions: []
+        })
+    }
+
     _draw(e) {
         let point = Utils.getXYFromEvent(e)
         point.y -= 50
 
-        var context = wx.createContext()
-        if (e.timeStamp - this.startTime > 1000) {
-            context.setStrokeStyle("#888888")    
-        } else {
-            context.setStrokeStyle("#ff0000")
+        let context = wx.createContext()
+        let radius = this.drawR
+        let strokeStyle = this.prepareColor
+        let lineWidth = this.drawLineWidth
 
+        if (e.timeStamp - this.startTime > 1000) {
+            strokeStyle = this.actionColor
+        }
+
+        if (this.penType != 'pen') {
+            radius = this.cleanR
+            lineWidth = this.cleanLineWidth
         }
         
-        context.setLineWidth(4)
-        context.arc(point.x, point.y, 5, 0, 2 * Math.PI, true)      
+        context.setStrokeStyle(strokeStyle)
+        context.setLineWidth(lineWidth)
+        context.arc(point.x, point.y, radius, 0, 2 * Math.PI, true)      
         context.stroke()
         
         wx.drawCanvas({

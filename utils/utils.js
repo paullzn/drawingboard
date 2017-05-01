@@ -18,10 +18,12 @@ export class Utils {
     }
     static getXYFromEvent(e) {
         let touch = null;
-        if (e.touches.length > 0) {
+        if (e.touches && e.touches.length > 0) {
             touch = e.touches[0]
-        } else {
+        } else if (e.changedTouches) {
             touch = e.changedTouches[0]
+        } else {
+            touch = {}
         }
         return {
             x: touch.pageX || touch.x,

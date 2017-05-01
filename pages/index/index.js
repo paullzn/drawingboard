@@ -8,7 +8,6 @@ import { EventRegistry } from '../../utils/EventRegistry'
 let stroke = new Stroke('baseCanvas')
 let pen = new Pen('pen')
 let controlPanel = new ControlPanel('controlPanel')
-let eventRegistry = new EventRegistry('controlPanel')
 
 var app = getApp()
 Page({
@@ -45,22 +44,22 @@ Page({
       }
     })
     controlPanel.draw()
-    eventRegistry.setListener(controlPanel, ['ontouchstart', 'ontouchend'])
-    eventRegistry.setListener(pen, ['ontouchstart', 'ontouchmove', 'ontouchend'])
-    eventRegistry.setListener(stroke, ['ontouchstart', 'ontouchmove', 'ontouchend'])
+    EventRegistry.getInstance().setListener(controlPanel, ['ontouchstart', 'ontouchend'])
+    EventRegistry.getInstance().setListener(pen, ['ontouchstart', 'ontouchmove', 'ontouchend'])
+    EventRegistry.getInstance().setListener(stroke, ['ontouchstart', 'ontouchmove', 'ontouchend'])
   },
   onReady: function(e) {
   },
   cvsTouchStart: function(e) {
-    eventRegistry.ontouchstart(e);
+    EventRegistry.getInstance().ontouchstart(e);
   },
   cvsTouchEnd: function(e) {
-    eventRegistry.ontouchend(e);
+    EventRegistry.getInstance().ontouchend(e);
   },
   cvsTouchMove: function(e) {
-    eventRegistry.ontouchmove(e);
+    EventRegistry.getInstance().ontouchmove(e);
   },
   cvsTouchCancel: function(e) {
-    eventRegistry.ontouchcancel(e);
+    EventRegistry.getInstance().ontouchcancel(e);
   }
 })

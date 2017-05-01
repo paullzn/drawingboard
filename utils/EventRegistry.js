@@ -1,20 +1,33 @@
 import { Utils } from '../utils/utils'
 
+var eventRegistryInstance = null;
 export class EventRegistry {
-    constructor(canvasId) {
-        this.canvasId = canvasId;
+
+    static getInstance() {
+        if (!eventRegistryInstance) {
+            eventRegistryInstance = new EventRegistry()
+        }
+        return eventRegistryInstance
+    }
+    constructor() {
         this.registry = {};
         return this;
     }
-    setListener(receiver, events) {
+
+    trigger(eventData, eventName) {
+        this._eventHandle(eventData, eventName)
+    }
+
+    setListener(receiver) {
         var that = this;
-        for(var i = 0; i < events.length; ++i) {
-            var event = events[i];
-            if (this.registry[event]) {
-                that.registry[event].push({receiver: receiver, callback: receiver[event]})
-            } else {
-                that.registry[event] = [{receiver: receiver, callback: receiver[event]}]
+        console.log(receiver.eventList)
+        for(var i = 0; i < receiver.eventList.length; ++i) {
+            let event = receiver.eventList[i];
+            if (!this.registry[event]) this.registry[event] = []
+            for(var key in receiver.children) {
+                this.setListener(receiver.children[key])
             }
+            that.registry[event].push({receiver: receiver, callback: receiver[event]})
         }
     }
     _eventHandle(e, event) {

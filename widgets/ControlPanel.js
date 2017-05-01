@@ -1,15 +1,24 @@
 import {Widget} from 'Widget'
+import {EraserButton} from 'EraserButton'
+import {PenButton} from 'PenButton'
+import {ResetButton} from 'ResetButton'
 import {Utils} from '../utils/utils'
+
 export class ControlPanel extends Widget {
     constructor(canvasId) {
         super()
         this.canvasId = canvasId;
         this.isOpen = false;
+        this.eventList.push(...['ontouchstart', 'ontouchend'])
+
+        this.addChild('resetButton', new ResetButton())
+        this.addChild('penButton', new PenButton())
+        this.addChild('eraserButton', new EraserButton())
 
         this.x = 10
-        this.y = 450
+        this.y = 468
         this.width = 300
-        this.height = 100
+        this.height = 82
         this.mainCenterX = 50
         this.mainCenterY = 510
         this.mainCenterR = 30
@@ -51,44 +60,24 @@ export class ControlPanel extends Widget {
         ctx.fill();
         ctx.stroke();
     }
-    _drawEraserButton(ctx) {
-        ctx.setStrokeStyle('gray')
-        ctx.rect(170, 485, 50, 50)
-        ctx.rect(185, 500, 20, 20)
-        ctx.stroke();
-    }
-    _drawResetButton(ctx) {
-        ctx.setStrokeStyle('gray')
-        ctx.rect(240, 485, 50, 50)
-        ctx.moveTo(265, 510)
-        ctx.arc(265, 510, 15, Math.PI / 4, Math.PI / 4 * 3, true)
-        ctx.stroke();
-    }
-    _drawPenButton(ctx) {
-        ctx.setStrokeStyle('gray')
-        ctx.rect(100, 485, 50, 50)
-        ctx.moveTo(125, 490);
-        ctx.lineTo(115, 510);
-        ctx.lineTo(135, 510);
-        ctx.lineTo(125, 490);
-        ctx.rect(115, 510, 20, 20)
-        ctx.stroke()
-    }
     _drawPanel(ctx) {
         ctx.setFillStyle('#efefef')
         ctx.setStrokeStyle('#efefef')
         ctx.rect(this.x, this.y, this.width, this.height);
         ctx.fill();
         ctx.stroke();
-        this._drawPenButton(ctx);
-        this._drawEraserButton(ctx);
-        this._drawResetButton(ctx);
+        this.drawChildActions('penButton', ctx)
+        this.drawChildActions('eraserButton', ctx)
+        this.drawChildActions('resetButton', ctx)
     }
     draw() {
         var ctx = wx.createContext()
         this._drawMainButton(ctx);
         if (this.isOpen) {
             this._drawPanel(ctx)
+            this.showChildren()
+        } else {
+            this.hideChildren()
         }
 
         wx.drawCanvas({

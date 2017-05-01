@@ -5,6 +5,13 @@ export class Stroke extends Widget {
         super()
         this.canvasId = canvasId;
         this.points = [];
+        this.eventList.push(...['ontouchstart', 'ontouchend', 'ontouchmove', 'pentypechange'])
+        this.penType = 'pen'
+
+        this.strokeColor = '#888888'
+        this.canvasColor = '#ffffff'
+        this.lineWidth = 3
+        this.eraserWidth = 60
     }
 
     checkHitArea() {
@@ -24,9 +31,16 @@ export class Stroke extends Widget {
         this.points = []
         return true
     }
+    pentypechange(e) {
+        console.log('PenTypeChange!!!!')
+        console.log(e)
+        this.penType = e.penType
+        return true
+    }
     _draw(e) {
         let point = Utils.getXYFromEvent(e)
         point.y -= 50
+
         if (this.points.length > 0) {
             var lastPoint = this.points[this.points.length - 1]
         } else {
@@ -37,8 +51,17 @@ export class Stroke extends Widget {
             return
         }
         var context = wx.createContext()
-        context.setStrokeStyle("#888888")
-        context.setLineWidth(4)
+        context.setLineCap('round')
+        context.setLineJoin('round')
+        let color = this.strokeColor
+        let lineWidth = this.lineWidth
+        if (this.penType != 'pen') {
+            color = this.canvasColor
+            lineWidth = this.eraserWidth
+        }
+
+        context.setStrokeStyle(color)
+        context.setLineWidth(lineWidth)
         context.moveTo(lastPoint.x, lastPoint.y);
         context.lineTo(point.x, point.y);
         context.stroke()
