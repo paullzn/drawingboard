@@ -4,14 +4,14 @@
     <canvas 
       disable-scroll="true"
       canvas-id="baseCanvas" id="baseCanvas"
-      style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
+      style='width:{{screenWidth}}px; height:{{screenHeight - 100}}px;'
       >
     </canvas>
     <canvas 
       disable-scroll="true"
 
       canvas-id="pen" id="pen"
-      style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
+      style='width:{{screenWidth}}px; height:{{screenHeight - 100}}px;'
       >
     </canvas>
     <canvas 
@@ -21,7 +21,7 @@
       bindtouchend="cvsTouchEnd"
       bindtouchcancel="cvsTouchCancel"
       canvas-id="controlPanel" id="controlPanel"
-      style='width:{{screenWidth}}px; height:{{screenHeight}}px;'
+      style='width:{{screenWidth}}px; height:{{screenHeight - 100}}px;'
       >
     </canvas>
   </view>

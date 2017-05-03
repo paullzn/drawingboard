@@ -1,0 +1,10 @@
+Flask
+Flask-Cache
+Flask-Fixtures
+Flask-Script
+flask_restful
+flask-testing
+greenlet
+gunicorn
+simplejson
+oss2==2.3.0
