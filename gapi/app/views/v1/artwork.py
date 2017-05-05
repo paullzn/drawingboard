@@ -21,16 +21,28 @@ class Artwork(Resource):
     @api_method(task='artwork_post')
     def post(self):
         """
+        @account_id account_id
+        @artwork_id artwork_id
         @image file image of the artwork
         """
         artwork_id = request.values.get('artwork_id', '')
+        account_id = request.values.get('account_id', '')
         
         if not artwork_id:
             raise RespMissingArg('artwork_id')
+        elif not account_id:
+            raise RespMissingArg('account_id')
         elif 'image' not in request.files:
             raise RespMissingArg('image')
         else: 
             oss.put(artwork_id, request.files.get('image'))
+            Artwork.create_unless_exists(account_id, artwork_id)
+            artwork = db.session.query(Artwork).filter(Artwork.accountid == account_id, Artwork.artwork_id == artwork_id).first()
+            if not artwork:
+                artwork = Artwork()
+                artwork.account_id = account_id
+                artwork.artwork_id = artwork_id
+                db.session.add(artwork)
         return {'artwork_id': artwork_id}
 
     @api_method(task='artwork_get')
@@ -39,7 +51,7 @@ class Artwork(Resource):
         if not artwork_id:
             return {
                 'artwork_id': new_id()
-            }
+            } 
         else:
             return {
                 'artwork_id': artwork_id,

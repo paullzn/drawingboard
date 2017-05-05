@@ -10,14 +10,21 @@ from flask import (
 )
 from werkzeug.utils import find_modules
 from app.libs.logger import init_logger, log_request
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 import config
 import simplejson as json
 
 LOG = getLogger(__name__)
 
-
 def configure_foundations(app):
+    from app.models import db
+
     init_logger(app)
+    @app.teardown_request
+    def teardown_request(exception=None):
+        db.session.remove()
 
 def configure_modules(app):
     import app.views.v1.artwork
