@@ -3,7 +3,7 @@
 import logging
 import logging.config
 from logging import (
-    INFO, getLogger, getLevelName, Handler,
+    INFO, getLogger, getLevelName
 )
 import time
 

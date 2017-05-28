@@ -4,6 +4,8 @@ import {PenButton} from 'PenButton'
 import {ResetButton} from 'ResetButton'
 import {Utils} from '../utils/utils'
 
+import {EventRegistry} from '../utils/EventRegistry'
+
 export class ControlPanel extends Widget {
     constructor(canvasId) {
         super()
@@ -44,6 +46,7 @@ export class ControlPanel extends Widget {
     }
     ontouchend(e) {
         this.isOpen = !this.isOpen
+        EventRegistry.getInstance().trigger(({controlPanelOpen: this.isOpen, changedTouches: e.changedTouches}, 'controlpanelchange'))
         this.draw()
     }
     _eToX(e) {

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding: utf-8
 
 STATE_AUTH_FAILED = "AUTH_FAILED"  # 不能开始验证

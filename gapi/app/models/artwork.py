@@ -1,11 +1,7 @@
 import datetime
-import hashlib
-import simplejson as json
-from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, String, Integer, Text, LargeBinary, ForeignKey, TIMESTAMP, func
-from sqlalchemy.ext.declarative import declarative_base
-from app.models import Base
+from sqlalchemy import BigInteger, Column, String, ForeignKey, TIMESTAMP, func
+from app.models import db, Base
 
 class Artwork(Base):
     __tablename__ = 'artwork'

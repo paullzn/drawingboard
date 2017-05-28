@@ -7,6 +7,7 @@ ALIYUN_OSS_EXTERNAL_HOST = 'oss-cn-beijing.aliyuncs.com'
 ALIYUN_OSS_ACCESS_KEY = 'test_access_key'
 ALIYUN_OSS_ACCESS_SECRET = 'test_access_secret'
 ALIYUN_OSS_BUCKET = 'drawingboard-prod-artwork'
+ALIYUN_EYES_OSS_BUCKET = 'beautyeyes-prod'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,

@@ -1,20 +1,11 @@
 # coding: utf-8
 
-import time
-import uuid
-
 from logging import getLogger
 from flask_restful import Api
-from flask import (
-    Flask, g, got_request_exception, request_finished, request_started
-)
-from werkzeug.utils import find_modules
-from app.libs.logger import init_logger, log_request
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from flask import Flask
+from app.libs.logger import init_logger
 
 import config
-import simplejson as json
 
 LOG = getLogger(__name__)
 
@@ -28,6 +19,9 @@ def configure_foundations(app):
 
 def configure_modules(app):
     import app.views.v1.artwork
+    import app.views.v1.feedback
+    import app.views.v1.login
+    import app.views.v1.eyes
 
 _app = None
 

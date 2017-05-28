@@ -1,20 +1,17 @@
 # coding: utf-8
 
-import copy
 import time
 import traceback
 import uuid
-from cStringIO import StringIO
-from functools import wraps
 
-import re
 import werkzeug
 import socket
 
 import simplejson as json
 from app.libs.logger import getLogger
 from flask import request, Response, g
-from app.exc import APIError, RespInternal
+from app.exc import APIError, RespInternal, RespUnauthorized
+from app.models import Session
 
 log = getLogger(__name__)
 
@@ -22,10 +19,8 @@ class api_method(object):
     api_implementation = None
     permission_required = []
 
-    def __init__(self, task, permission_required=None, **kwargs):
-        if permission_required is None:
-            permission_required = []
-        self.permission_required = permission_required
+    def __init__(self, task, login_required=False, **kwargs):
+        self.login_required = login_required
         self.task = task
 
     def __call__(self, func):
@@ -38,16 +33,13 @@ class api_method(object):
 
     def authenticate(self):
         g.log = {'task': self.task}
-        g.perm = request.headers.get('perm', '').split(',')
-        if 'faceid_lite' in g.perm:
-            g.perm.append('lite')
-        if 'faceid_lite_datasource' in g.perm:
-            g.perm += ['lite_cmp_usesource', 'lite_cmp_nosource']
-        if 'lite_cmp_usesource' in g.perm or 'lite_cmp_nosource' in g.perm:
-            g.perm += ['lite']
-        map(check_perm, self.permission_required)
-        if 'api_key' in request.values:
-            g.log.update({'api_key': request.values.get('api_key')})
+        if request.headers.get('loginsession', ''):
+            session_hash = request.headers.get('loginsession')
+            g.account, g.session = Session.check_session(session_hash)
+            print g.account
+        if (not hasattr(g, 'account') or g.account == None) and self.login_required:
+            print 'raise !!!!!!'
+            raise RespUnauthorized()
 
     def get_result(self, *args, **kwargs):
         caught_exc = None
@@ -63,13 +55,6 @@ class api_method(object):
             result = self.api_implementation(*args, **kwargs)
         except APIError as e:
             caught_exc = e
-            if hasattr(g, "session"):
-                if self.task == "video":
-                    g.session.handle_video_failure()
-                if self.task == "ocr":
-                    g.session.handle_ocr_failure()
-                if self.task in ('validate_front_face', 'validate_side_face'):
-                    g.session.handle_validation_failure(self.task)
 
         except Exception as e:
             print '================', caught_exc
@@ -82,8 +67,6 @@ class api_method(object):
                 log.error('api' + 'request_id={} traceback={}'.format(g.request_id, traceback.format_exc()))
                 http_code = 500
         finally:
-            if hasattr(g, "session"):
-                g.session.save()
             if caught_exc:
                 result, http_code = caught_exc.get_http_result()
             if caught_exc is None or isinstance(caught_exc, APIError):
@@ -92,32 +75,6 @@ class api_method(object):
             if not isinstance(result, Response):
                 result.update({'time_used': int((time.time() - start_time) * 1000)})
                 result.update({'request_id': g.request_id})
-            request_data = {}
-            request_data.update({k: v for k, v in request.values.iteritems()})
-            request_data.pop('name', None)
-            request_data.pop('api_secret', None)
-            request_data.pop('idcard', None)
-            result_copy = copy.deepcopy(result)
-            if 'images' in result_copy:
-                # 删除result中的图片
-                del result_copy['images']
-            if self.task == 'verify':
-                result_copy.pop('image_face_front', None)
-                result_copy.pop('image_face_side', None)
-
-            try:
-                g.log.update({
-                    'status_code': http_code,
-                    'response': result_copy,
-                    'ip': get_ip()
-                })
-                cache = {
-                    'image_best': g.log.get('image_best', '')
-                }
-            except:
-                log.error(traceback.format_exc())
-                result, http_code = RespInternal().get_http_result()
-
         return result, http_code
 
     def view_func(self, *args, **kwargs):
@@ -144,14 +101,6 @@ class api_method(object):
             result.headers['Access-Control-Max-Age'] = '2592000'
 
         return result
-
-def check_perm(field):
-    if field in g.perm:
-        return True
-    if field == 'Authorized':
-        raise RespUnauthorized()
-    else:
-        raise RespUnauthorized('Denied.')
 
 def get_ip():
     ip = ''

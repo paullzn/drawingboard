@@ -13,19 +13,22 @@
   border-bottom: 5rpx solid #48c23d;}
   
 .swiper-box{ display: block; height: 100%; width: 100%; overflow: hidden; } 
-.swiper-box view{ 
-  text-align: center; 
-}
 .scroll-view-row {
     margin: 0px;
     padding: 0px;
     height: 122px;
+    text-align: left;
+    width: 100%;
 }
 .scroll-view-item {
     display: inline-block;
     width: 120px;
     height: 120px;
     margin: 1px;
+}
+.scroll-view-item image {
+    width: 120px;
+    height: 120px;
 }
 .bc_green {
     background-color: #48c23d;

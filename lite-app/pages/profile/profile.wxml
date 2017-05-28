@@ -5,44 +5,15 @@
   <view class="swiper-tab-list {{currentTab==2 ? 'on' : ''}}" data-current="2" bindtap="swichNav"></view> 
 </view> 
   
-<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{winHeight - 31}}px" bindchange="bindChange"> 
+<swiper current="{{currentTab}}" class="swiper-box" duration="300" style="height:{{screenHeight - 31}}px" bindchange="bindChange">
   <!-- 我是哈哈 -->
   <swiper-item> 
-    <scroll-view scroll-y="true" style="height:{{winHeight - 31}}px" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-        <view class="scroll-view-row">
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="red"  class="scroll-view-item bc_red"></view>
-            <view id="yellow" class="scroll-view-item bc_yellow"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="blue" class="scroll-view-item bc_blue"></view>
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="red"  class="scroll-view-item bc_red"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="blue" class="scroll-view-item bc_blue"></view>
-            <view id="yellow" class="scroll-view-item bc_yellow"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="blue" class="scroll-view-item bc_blue"></view>
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="red"  class="scroll-view-item bc_red"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="yellow" class="scroll-view-item bc_yellow"></view>
-            <view id="blue" class="scroll-view-item bc_blue"></view>
-            <view id="green" class="scroll-view-item bc_green"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="red"  class="scroll-view-item bc_red"></view>
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="blue" class="scroll-view-item bc_blue"></view>
-        </view>
-        <view class="scroll-view-row">
-            <view id="green" class="scroll-view-item bc_green"></view>
-            <view id="yellow" class="scroll-view-item bc_yellow"></view>
-            <view id="blue" class="scroll-view-item bc_blue"></view>
+    <scroll-view scroll-y="true" style="height:{{screenHeight - 31}}px" bindscrolltoupper="upper" bindscrolltolower="lower" bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+        <view class="scroll-view-row" wx:for="{{orgedArtworks}}" wx:for-item="row">
+            <view class="scroll-view-item" wx:for="{{row}}" wx:for-item="item"
+                id="{{item.artwork_id}}">
+                <image mode="aspectFill" src="data:image/jpg;base64,{{item.image}}"></image>
+            </view>
         </view>
     </scroll-view>
   </swiper-item>

@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.sql import operators, visitors
 
 app = create_app()
 
@@ -68,3 +67,5 @@ db = Database()
 from app.models.artwork import *
 from app.models.account import *
 from app.models.feedback import *
+from app.models.session import *
+from app.models.eyes import *

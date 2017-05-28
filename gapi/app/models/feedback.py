@@ -1,8 +1,4 @@
-import datetime
-import hashlib
-import simplejson as json
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, Integer, Text, LargeBinary, ForeignKey, TIMESTAMP, func
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import BigInteger, Column, Text, ForeignKey, TIMESTAMP, func
 from app.models import Base
 
 class Feedback(Base):

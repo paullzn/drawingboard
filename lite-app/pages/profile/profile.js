@@ -1,54 +1,51 @@
-// pages/index/profile.js
-var app = getApp() 
-Page( { 
- data: { 
-  /** 
-    * 页面配置 
-    */
-  winWidth: 0, 
-  winHeight: 0, 
-  // tab切换 
-  currentTab: 0, 
- }, 
- onLoad: function() { 
-  var that = this; 
-  
-  /** 
-   * 获取系统信息 
-   */
-  wx.getSystemInfo( { 
-  
-   success: function( res ) { 
-    that.setData( { 
-     winWidth: res.windowWidth, 
-     winHeight: res.windowHeight 
-    }); 
-   }
-  
-  }); 
- }, 
- /** 
-   * 滑动切换tab 
-   */
- bindChange: function( e ) { 
-  
-  var that = this; 
-  that.setData( { currentTab: e.detailcurrent }); 
-  
- }, 
- /** 
-  * 点击tab切换 
-  */
- swichNav: function( e ) { 
-  
-  var that = this; 
-  
-  if( this.datacurrentTab === e.target.datasetcurrent ) { 
-   return false; 
-  } else { 
-   thatsetData( { 
-    currentTab: e.target.data.setcurrent 
-   }) 
-  } 
- } 
+//profile.js
+
+import { Server } from '../../backends/Server'
+
+var app = getApp()
+Page({
+    data: {
+        currentTab: 0,
+        screenWidth: 0,
+        screenHeight: 0,
+        orgedArtworks: [[]]
+    },
+    _render: function(artworks) {
+        let orgedArtworks = [[]]
+        let row_index = 0
+        let i = 0
+        while (i < artworks.length) {
+            orgedArtworks[row_index].push(artworks[i])
+            if (orgedArtworks[row_index].length >= 3) {
+                ++row_index
+            }
+            ++i
+        }
+        console.log(orgedArtworks)
+        this.setData({
+            orgedArtworks: orgedArtworks
+        })
+        
+    },
+    onLoad: function() {
+        var that = this;
+        wx.getSystemInfo({  
+            success: function (res) {
+                that.setData({
+                    screenWidth: res.windowWidth,
+                    screenHeight: res.windowHeight
+                })
+            }
+        })
+
+        Server.getInstance().get_artwork(null,
+            that,
+            function (status, data) {
+                that._render(data.artworks)
+            },
+            function (status, data) {
+
+            }
+        )
+    }
 }) 

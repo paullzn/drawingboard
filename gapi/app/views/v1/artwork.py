@@ -3,11 +3,11 @@
 import base64
 from logging import getLogger
 
-from flask import Blueprint, request, g
-from flask_restful import Resource, reqparse
+from flask import request, g
+from flask_restful import Resource
 
 from app import create_app
-from app.utils import new_id
+from app.models import db, Artwork
 from base import api_method
 from app.exc import RespMissingArg
 from app.libs import oss
@@ -16,46 +16,42 @@ log = getLogger(__name__)
 
 api = create_app().api
 
-class Artwork(Resource):
+class ArtworkAPI(Resource):
 
-    @api_method(task='artwork_post')
+    @api_method(task='artwork_post', login_required=True)
     def post(self):
         """
-        @account_id account_id
         @artwork_id artwork_id
         @image file image of the artwork
         """
         artwork_id = request.values.get('artwork_id', '')
-        account_id = request.values.get('account_id', '')
-        
+
         if not artwork_id:
             raise RespMissingArg('artwork_id')
-        elif not account_id:
-            raise RespMissingArg('account_id')
         elif 'image' not in request.files:
             raise RespMissingArg('image')
-        else: 
+        else:
             oss.put(artwork_id, request.files.get('image'))
-            Artwork.create_unless_exists(account_id, artwork_id)
-            artwork = db.session.query(Artwork).filter(Artwork.accountid == account_id, Artwork.artwork_id == artwork_id).first()
+            Artwork.create_unless_exists(g.account.id, artwork_id)
+            artwork = db.session.query(Artwork).filter(Artwork.accountid == g.account.id, Artwork.artwork_id == artwork_id).first()
             if not artwork:
                 artwork = Artwork()
-                artwork.account_id = account_id
+                artwork.accountid = g.account.id
                 artwork.artwork_id = artwork_id
                 db.session.add(artwork)
         return {'artwork_id': artwork_id}
 
-    @api_method(task='artwork_get')
+    @api_method(task='artwork_get', login_required=True)
     def get(self, artwork_id=None):
         artwork_id = request.values.get('artwork_id', '')
-        if not artwork_id:
-            return {
-                'artwork_id': new_id()
-            } 
-        else:
-            return {
-                'artwork_id': artwork_id,
-                'image': base64.b64encode(oss.get(artwork_id))
-            }
+        query = db.session.query(Artwork).filter(Artwork.accountid == g.account.id)
+        if artwork_id:
+            query = query.filter(Artwork.artwork_id == artwork_id)
+        return {
+            'artworks': [{
+                'artwork_id': artwork.artwork_id,
+                'image': base64.b64encode(oss.get(artwork.artwork_id))
+            }] for artwork in query.all()
+        }
 
-api.add_resource(Artwork, '/api/v1/artwork')
+api.add_resource(ArtworkAPI, '/api/v1/artwork')
